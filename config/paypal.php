@@ -12,4 +12,6 @@ return array(
 	// PayPal environment: live, sandbox, beta-sandbox
 	'environment' => 'sandbox',
 
+	// API Version number
+	'api_version' => 63.0,
 );
