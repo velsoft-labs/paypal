@@ -30,7 +30,7 @@ abstract class PayPal {
 			$class = 'PayPal_'.$type;
 
 			// Load default configuration
-			$config = Kohana::config('paypal');
+			$config = Kohana::$config->load('paypal');
 
 			// Create a new PayPal instance with the default configuration
 			PayPal::$instances[$type] = new $class($config['username'], $config['password'], $config['signature'], $config['environment']);
