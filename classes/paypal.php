@@ -120,7 +120,7 @@ abstract class PayPal {
 		// Add the command to the parameters
 		$params = array('cmd' => '_'.$command) + $params;
 
-		return 'https://www.'.$env.'paypal.com/webscr?'.http_build_query($params, NULL, '&');
+		return 'https://www.'.$env.'paypal.com/webscr?'.http_build_query($params, '', '&');
 	}
 
 	/**
@@ -145,7 +145,7 @@ abstract class PayPal {
 		) + $params;
 		
 		// Set up new Request_Client_Curl
-		$client = Request_Client_Curl;
+		$client = new Request_Client_Curl;
 		$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
 			->options(CURLOPT_SSL_VERIFYHOST, FALSE);
 		
