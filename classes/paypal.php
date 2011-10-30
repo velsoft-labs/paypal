@@ -143,38 +143,34 @@ abstract class PayPal {
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,
 		) + $params;
-
-		// Create a new curl instance
-		$curl = curl_init();
-
-		// Set curl options
-		curl_setopt_array($curl, array(
-			CURLOPT_URL            => $this->api_url(),
-			CURLOPT_POST           => TRUE,
-			CURLOPT_POSTFIELDS     => http_build_query($post, NULL, '&'),
-			CURLOPT_SSL_VERIFYPEER => FALSE,
-			CURLOPT_SSL_VERIFYHOST => FALSE,
-			CURLOPT_RETURNTRANSFER => TRUE,
-		));
-
-		if (($response = curl_exec($curl)) === FALSE)
+		
+		// Set up new Request_Client_Curl
+		$client = Request_Client_Curl;
+		$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
+			->options(CURLOPT_SSL_VERIFYHOST, FALSE);
+		
+		// Create the Request, using the client
+		$request = Request::factory($this->api_url())
+			->client($client)
+			->method(Request::POST)
+			->body($post);
+		
+		try
 		{
-			// Get the error code and message
-			$code  = curl_errno($curl);
-			$error = curl_error($curl);
-
-			// Close curl
-			curl_close($curl);
+			// Get the Response for this Request
+			$response = $request->execute();
+		}
+		catch (Request_Exception $e)
+		{
+			$code 	= $e->getCode();
+			$error 	= $e->getMessage();
 
 			throw new Kohana_Exception('PayPal API request for :method failed: :error (:code)',
 				array(':method' => $method, ':error' => $error, ':code' => $code));
 		}
 
-		// Close curl
-		curl_close($curl);
-
 		// Parse the response
-		parse_str($response, $data);
+		parse_str($response->body(), $data);
 
 		if ( ! isset($data['ACK']) OR strpos($data['ACK'], 'Success') === FALSE)
 		{
