@@ -11,7 +11,7 @@
  */
 abstract class Kohana_PayPal {
 
-	const VERSION = 51.0;
+	const VERSION = '51.0';
 
 	/**
 	 * @var  array  instances
