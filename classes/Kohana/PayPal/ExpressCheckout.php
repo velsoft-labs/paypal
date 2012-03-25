@@ -9,12 +9,10 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class PayPal_ExpressCheckout extends PayPal {
+class Kohana_PayPal_ExpressCheckout extends PayPal {
 
 	// Default parameters
-	protected $_default = array(
-		'PAYMENTACTION' => 'Sale',
-	);
+	protected $_default = array('PAYMENTACTION' => 'Sale');
 
 	/**
 	 * Make an SetExpressCheckout call.

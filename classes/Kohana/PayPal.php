@@ -9,7 +9,9 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-abstract class PayPal {
+abstract class Kohana_PayPal {
+
+	const VERSION = 51.0;
 
 	/**
 	 * @var  array  instances
@@ -138,35 +140,34 @@ abstract class PayPal {
 		// Create POST data
 		$post = array(
 			'METHOD'    => $method,
-			'VERSION'   => 51.0,
+			'VERSION'   => PayPal::VERSION,
 			'USER'      => $this->_username,
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,
 		) + $params;
 		
-		// Set up new Request_Client_Curl
-		$client = new Request_Client_Curl;
-		$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
-			->options(CURLOPT_SSL_VERIFYHOST, FALSE);
-		
 		// Create the Request, using the client
-		$request = Request::factory($this->api_url())
-			->client($client)
-			->method(Request::POST)
-			->body($post);
+		$request = Request::factory($this->api_url());
+		$client  = $request->client();
+		
+		if ($client instanceof Request_Client_Curl)
+		{
+			// Disable SSL checks
+			$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
+				->options(CURLOPT_SSL_VERIFYHOST, FALSE);
+		}
 		
 		try
 		{
 			// Get the Response for this Request
-			$response = $request->execute();
+			$response = $request->method(Request::POST)
+				->body($post)
+				->execute();
 		}
 		catch (Request_Exception $e)
 		{
-			$code 	= $e->getCode();
-			$error 	= $e->getMessage();
-
 			throw new Kohana_Exception('PayPal API request for :method failed: :error (:code)',
-				array(':method' => $method, ':error' => $error, ':code' => $code));
+				array(':method' => $method, ':error' => $e->getMessage(), ':code' => $e->getCode()));
 		}
 
 		// Parse the response
