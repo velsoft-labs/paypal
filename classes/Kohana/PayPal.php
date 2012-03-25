@@ -11,7 +11,7 @@
  */
 abstract class Kohana_PayPal {
 
-	const VERSION = '51.0';
+	const API_VERSION = '51.0';
 
 	/**
 	 * @var  array  instances
@@ -140,7 +140,7 @@ abstract class Kohana_PayPal {
 		// Create POST data
 		$post = array(
 			'METHOD'    => $method,
-			'VERSION'   => PayPal::VERSION,
+			'VERSION'   => PayPal::API_VERSION,
 			'USER'      => $this->_username,
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,
