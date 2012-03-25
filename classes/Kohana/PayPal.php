@@ -190,12 +190,11 @@ abstract class Kohana_PayPal {
 		{
 			$this->_http_client = $client;
 		}
-		
-		/**
-		 * Automatically create a HTTP client if none defined yet
-		 */
-		if ($this->_http_client === NULL)
+		elseif ($this->_http_client === NULL)
 		{
+			/**
+			 * Automatically create a HTTP client if none defined yet
+			 */		
 			if (extension_loaded('http'))
 			{
 				$this->_http_client = new Request_Client_HTTP;
