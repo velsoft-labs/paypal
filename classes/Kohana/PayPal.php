@@ -12,6 +12,11 @@
 abstract class Kohana_PayPal {
 
 	const VERSION = '51.0';
+	
+	/**
+	 * @var Request_Client_External
+	 */
+	protected $_http_client;
 
 	/**
 	 * @var  array  instances
@@ -148,14 +153,7 @@ abstract class Kohana_PayPal {
 		
 		// Create the Request, using the client
 		$request = Request::factory($this->api_url());
-		$client  = $request->client();
-		
-		if (extension_loaded('curl') and $client instanceof Request_Client_Curl)
-		{
-			// Disable SSL checks
-			$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
-				->options(CURLOPT_SSL_VERIFYHOST, FALSE);
-		}
+		$client  = $request->client($this->http_client());
 		
 		try
 		{
@@ -180,6 +178,43 @@ abstract class Kohana_PayPal {
 		}
 
 		return $data;
+	}
+	
+	/**
+	 * @param  Request_Client_External $client
+	 * @return Request_Client_External
+	 */
+	public function http_client(Request_Client_External $client = NULL)
+	{
+		if ($client !== NULL)
+		{
+			$this->_http_client = $client;
+		}
+		
+		/**
+		 * Automatically create a HTTP client if none defined yet
+		 */
+		if ($this->_http_client === NULL)
+		{
+			if (extension_loaded('http'))
+			{
+				$this->_http_client = new Request_Client_HTTP;
+			}
+			elseif (extension_loaded('curl'))
+			{
+				$this->_http_client = new Request_Client_Curl;
+				
+				// Disable SSL checks
+				$this->_http_client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
+					->options(CURLOPT_SSL_VERIFYHOST, FALSE);
+			}
+			else
+			{
+				$this->_http_client = new Request_Client_Stream;
+			}
+		}
+		
+		return $this->_http_client;
 	}
 
 } // End PayPal
