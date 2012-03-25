@@ -161,7 +161,7 @@ abstract class Kohana_PayPal {
 		{
 			// Get the Response for this Request
 			$response = $request->method(Request::POST)
-				->body($post)
+				->post($post)
 				->execute();
 		}
 		catch (Request_Exception $e)

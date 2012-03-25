@@ -32,13 +32,17 @@ class Kohana_PayPal_ExpressCheckout extends PayPal {
 			$params += $this->_default;
 		}
 
-		if ( ! isset($params['AMT']))
-		{
-			throw new Kohana_Exception('You must provide a :param parameter for :method',
-				array(':param' => 'AMT', ':method' => __METHOD__));
-		}
-
 		return $this->_post('SetExpressCheckout', $params);
+	}
+	
+	/**
+	 * Make an GetExpressCheckout call
+	 * 
+	 * @param  string   Token returned by SetExpressCheckout
+	 */
+	public function get($token)
+	{
+		return $this->_post('GetExpressCheckoutDetails', array('TOKEN' => $token));
 	}
 
 } // End PayPal_ExpressCheckout
