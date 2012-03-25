@@ -36,18 +36,25 @@ class Kohana_PayPal_ExpressCheckout extends PayPal {
 	}
 	
 	/**
-	 * Make an GetExpressCheckout call
+	 * Make an GetExpressCheckoutDetails call
 	 * 
 	 * @param  string   Token returned by SetExpressCheckout
+	 * @return array    Checkout details 
 	 */
-	public function get($token)
+	public function get_details($token)
 	{
 		return $this->_post('GetExpressCheckoutDetails', array('TOKEN' => $token));
 	}
 	
+	/**
+	 * Make an DoExpressCheckoutPayment call
+	 * 
+	 * @param  array    $params retrieved from GetExpressCheckoutDetails call
+	 * @return array    Response data
+	 */
 	public function do_payment(array $params)
 	{
-		$params = ($params === NULL) ? $this->_default : $params + $this->_default;
+		$params = $params === NULL ? $this->_default : $params + $this->_default;
 	
 		return $this->_post('DoExpressCheckoutPayment', $params);
 	}

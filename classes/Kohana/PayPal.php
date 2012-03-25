@@ -11,17 +11,17 @@
  */
 abstract class Kohana_PayPal {
 
-	const VERSION = '51.0';
-	
-	/**
-	 * @var Request_Client_External
-	 */
-	protected $_http_client;
+	const API_VERSION = '51.0';
 
 	/**
 	 * @var  array  instances
 	 */
 	public static $instances = array();
+	
+	/**
+	 * @var Request_Client_External
+	 */
+	protected $_http_client;
 
 	/**
 	 * Returns a singleton instance of one of the PayPal classes.
@@ -145,7 +145,7 @@ abstract class Kohana_PayPal {
 		// Create POST data
 		$post = array(
 			'METHOD'    => $method,
-			'VERSION'   => PayPal::VERSION,
+			'VERSION'   => PayPal::API_VERSION,
 			'USER'      => $this->_username,
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,
