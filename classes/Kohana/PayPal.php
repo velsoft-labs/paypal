@@ -150,7 +150,7 @@ abstract class Kohana_PayPal {
 		$request = Request::factory($this->api_url());
 		$client  = $request->client();
 		
-		if ($client instanceof Request_Client_Curl)
+		if (extension_loaded('curl') and $client instanceof Request_Client_Curl)
 		{
 			// Disable SSL checks
 			$client->options(CURLOPT_SSL_VERIFYPEER, FALSE)
