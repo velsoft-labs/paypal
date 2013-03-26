@@ -138,7 +138,7 @@ abstract class PayPal {
 		// Create POST data
 		$post = array(
 			'METHOD'    => $method,
-			'VERSION'   => 51.0,
+			'VERSION'   => Kohana::$config->load('paypal.api_version'),
 			'USER'      => $this->_username,
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,

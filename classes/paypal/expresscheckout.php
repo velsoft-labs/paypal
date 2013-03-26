@@ -19,32 +19,32 @@ class PayPal_ExpressCheckout extends PayPal {
     public function DoExpressCheckoutPayment(array $params)
     {
         $required = array('PAYERID','TOKEN','AMT');
-        
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
             if ( ! isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
                     array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('DoExpressCheckoutPayment', $params);
     }
-    
+
     public function GetExpressCheckoutDetails(array $params)
     {
         $required = array('TOKEN');
-        
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
             if ( ! isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
                     array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('GetExpressCheckoutDetails', $params);
     }
 
